@@ -1,10 +1,9 @@
-name: Project 4 Deployment
+name: Project 4 Final Deploy
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: 
 
 jobs:
   deploy:
@@ -21,22 +20,19 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Web folder mein jana
+            # 1. Web directory mein jana
             cd /var/www/html
             
-            # 1. Purani portfolio files ko backup ya delete karna (Safety ke liye)
-            # Hum saari purani files delete kar rahe hain taaki sirf Royal Events dikhe
-            sudo rm -rf *
-            
-            # 2. Git setup aur code pull karna
-            sudo git config --global --add safe.directory /var/www/html
-            
-            # Agar .git folder nahi hai (jo ki hoga kyunki humne rm -rf kiya)
-            # Toh fresh clone karenge
-            sudo git clone https://github.com/suhel33/localrepo.git .
-            
-            # 3. Permissions fix karna
+            # 2. Permissions sahi karna taaki files delete/write ho sakein
             sudo chown -R ubuntu:ubuntu /var/www/html
             
-            # 4. Nginx restart karna
+            # 3. Purani saari files (Portfolio/Default Nginx) saaf karna
+            sudo rm -rf *
+            sudo rm -rf .git
+            
+            # 4. Fresh code clone karna seedha html folder mein
+            # Note: Last mein ' .' lagana zaroori hai (Space then Dot)
+            git clone https://github.com/Suhel33/ci-cd-project.git .
+            
+            # 5. Nginx restart karna
             sudo systemctl restart nginx
