@@ -1,0 +1,379 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRANDVOWS | Cinematic Archive</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
+    
+    <style>
+        :root {
+            --brand-gold: #D4AF37; /* Bright Gold from image */
+            --soft-white: #F9F8F6;
+            --deep-charcoal: #0B0B0B; /* Match footer darkness */
+            --border-light: #D1CDCA;
+            --transition-smooth: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --pop-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* --- Global Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--soft-white); font-family: 'Inter', sans-serif; color: var(--deep-charcoal); overflow-x: hidden; }
+
+        /* --- Navigation --- */
+        nav { position: absolute; top: 0; width: 100%; padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .logo { font-weight: 600; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; color: #FFFFFF; }
+        .logo span { color: var(--brand-gold); }
+        .back-link { color: #FFFFFF; text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; border-bottom: 1px solid rgba(255,255,255,0.3); transition: var(--transition-smooth); }
+        .back-link:hover { color: var(--brand-gold); border-color: var(--brand-gold); }
+
+        /* --- Hero Section --- */
+        .hero-video-container { position: relative; width: 100%; height: 60vh; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .hero-video-container video { position: absolute; min-width: 100%; min-height: 100%; object-fit: cover; opacity: 0.55; }
+        .hero-overlay-content { position: relative; z-index: 5; text-align: center; color: #fff; }
+        .hero-overlay-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 700; }
+
+        /* --- Filter Section --- */
+        .gallery-intro { padding: 40px 20px; text-align: center; }
+        .filter-group { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .filter-btn { border: 1px solid var(--border-light); background: transparent; padding: 10px 28px; border-radius: 100px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: var(--transition-smooth); }
+        .filter-btn.active { background: var(--brand-gold); color: white; border-color: var(--brand-gold); box-shadow: 0 10px 20px rgba(142,121,84,0.2); }
+
+        /* --- Masonry Grid --- */
+        .grid { max-width: 1400px; margin: 0 auto; width: 100%; }
+        .grid-item { width: 25%; padding: 10px; float: left; }
+        .video-wrapper { position: relative; background: #000; overflow: hidden; border-radius: 12px; aspect-ratio: 9/13; cursor: pointer; transition: var(--transition-smooth); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        .video-wrapper video { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s ease; opacity: 0.85; }
+        .video-wrapper:hover { transform: translateY(-8px); }
+        .video-wrapper:hover video { transform: scale(1.1); }
+        .overlay-info { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; color: #fff; }
+        .overlay-info h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 5px; }
+        .overlay-info span { color: var(--brand-gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- MODAL & LIGHTBOX --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(10px); padding: 20px; }
+        .modal-box { background: #fff; width: 100%; max-width: 900px; height: 85vh; border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; transform: scale(0.8); opacity: 0; transition: var(--pop-bounce); }
+        .modal-overlay.active { display: flex; }
+        .modal-overlay.active .modal-box { transform: scale(1); opacity: 1; }
+        .modal-header { padding: 25px 40px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: white; }
+        .modal-header h2 { font-family: 'Playfair Display'; color: var(--brand-gold); font-size: 1.6rem; margin: 0; }
+        .btn-book-header { background: var(--brand-gold); color: white; border: none; padding: 10px 22px; border-radius: 50px; font-weight: 600; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .modal-content { flex: 1; overflow-y: auto; padding: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .modal-content img { width: 100%; border-radius: 10px; cursor: zoom-in; }
+        .close-btn { background: #f5f5f5; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+          
+                .modal-content img:hover { transform: scale(1.03); }
+
+        .lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; z-index: 3000; align-items: center; justify-content: center; flex-direction: column; }
+        #fullImage { max-width: 90%; max-height: 80vh; object-fit: contain; }
+                .lightbox-top-bar { position: absolute; top: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 3001; }
+
+        /* --- UPDATED FOOTER (Matches Image) --- */
+        .main-footer { background: var(--deep-charcoal); color: #fff; padding: 80px 60px 40px; border-top: 5px solid var(--brand-gold); }
+        .footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1.2fr 1fr 1.5fr; gap: 40px; }
+        
+        .footer-about h3 { font-family: 'Playfair Display'; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 2px; }
+        .footer-about p { color: #aaa; font-size: 0.9rem; line-height: 1.7; margin-bottom: 25px; max-width: 300px; }
+        
+        .social-icons { display: flex; gap: 12px; }
+        .social-icons a { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; color: var(--brand-gold); border: 1px solid #333; transition: 0.3s; text-decoration: none; }
+        .social-icons a:hover { background: var(--brand-gold); color: #000; transform: translateY(-5px); }
+
+        .footer-column h4 { font-family: 'Playfair Display'; font-size: 1.4rem; margin-bottom: 25px; position: relative; }
+        .footer-column ul { list-style: none; }
+        .footer-column ul li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; color: #ddd; font-size: 0.95rem; }
+        .footer-column ul li i { color: var(--brand-gold); font-size: 0.8rem; }
+        .footer-column a { color: #aaa; text-decoration: none; transition: 0.3s; }
+        .footer-column a:hover { color: var(--brand-gold); padding-left: 5px; }
+
+        /* Backup Plan Card */
+        .backup-card { border: 1px dashed var(--brand-gold); padding: 30px; border-radius: 15px; background: rgba(142, 121, 84, 0.05); }
+        .backup-card h4 { color: var(--brand-gold); font-size: 1.2rem; display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .backup-card p { font-size: 0.85rem; color: #bbb; line-height: 1.6; margin-bottom: 20px; }
+        .contact-large { display: flex; align-items: center; gap: 15px; color: #fff; text-decoration: none; }
+        .contact-large i { font-size: 1.5rem; color: var(--brand-gold); }
+        .contact-large div span { display: block; font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
+        .contact-large div strong { font-size: 1.2rem; letter-spacing: 1px; }
+
+        /* Footer Bottom */
+        .footer-bottom { max-width: 1400px; margin: 40px auto 0; padding-top: 30px; border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; color: #666; font-size: 0.8rem; }
+        .whatsapp-float { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } .grid-item { width: 33.33%; } }
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; } .grid-item { width: 50%; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">GRAND<span>VOWS</span></div>
+        <a href="#" class="back-link">← BACK TO STORY</a>
+    </nav>
+
+    <div class="hero-video-container">
+        <video autoplay muted loop playsinline><source src="image/videoplayback (1).mp4" type="video/mp4"></video>
+        <div class="hero-overlay-content">
+            <p style="color:var(--brand-gold); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;">The Visual Archive</p>
+            <h1>Motion Stories</h1>
+        </div>
+    </div>
+
+    <header class="gallery-intro">
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="*">All Stories</button>
+            <button class="filter-btn" data-filter=".wedding">Wedding</button>
+            <button class="filter-btn" data-filter=".haldi">Haldi</button>
+            <button class="filter-btn" data-filter=".mehndi">Mehndi</button>
+            <button class="filter-btn" data-filter=".birthday">Birthday</button>
+            <button class="filter-btn" data-filter=".anniversory">Anniversory</button>
+             <button class="filter-btn" data-filter=".ring">Ring</button>
+            <!-- <button class="filter-btn" data-filter=".car">Car Decoration</button> -->
+            <!-- <button class="filter-btn" data-filter=".corprorate">Corprorate</button> -->
+        </div>
+    </header>
+
+    <section class="gallery-masonry">
+        <div class="grid">
+            <div class="grid-item wedding">
+                <div class="video-wrapper" onclick="openForm('wedding')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (6).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>Wedding Film</span><h3>The Grand Entry</h3></div>
+                </div>
+            </div>
+            <div class="grid-item haldi">
+                <div class="video-wrapper" onclick="openForm('haldi')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>Haldi Ceremony</span><h3>Golden Moments</h3></div>
+                </div>
+            </div>
+            <div class="grid-item mehndi">
+                <div class="video-wrapper" onclick="openForm('mehndi')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>Mehndi Ceremony</span><h3>Artistic Henna</h3></div>
+                </div>
+            </div>
+            <div class="grid-item birthday">
+                <div class="video-wrapper" onclick="openForm('birthday')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>Birthday Party</span><h3>Grand Celebration</h3></div>
+                </div>
+            </div>
+             <div class="grid-item birthday">
+                <div class="video-wrapper" onclick="openForm('corprorate')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>corprorate</span><h3>Grand Celebration</h3></div>
+                </div>
+            </div>
+             <div class="grid-item birthday">
+                <div class="video-wrapper" onclick="openForm('corprorate')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>corprorate</span><h3>Grand Celebration</h3></div>
+                </div>
+            </div>
+             <div class="grid-item birthday">
+                <div class="video-wrapper" onclick="openForm('corprorate')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>corprorate</span><h3>Grand Celebration</h3></div>
+                </div>
+            </div>
+             <div class="grid-item birthday">
+                <div class="video-wrapper" onclick="openForm('corprorate')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>corprorate</span><h3>Grand Celebration</h3></div>
+                </div>
+            </div>
+             <div class="grid-item birthday">
+                <div class="video-wrapper" onclick="openForm('car')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>car decoration</span><h3>Grand Celebration</h3></div>
+                </div>
+            </div>
+             <div class="grid-item anniversory">
+                <div class="video-wrapper" onclick="openForm('anniversory')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>anniversory</span><h3>Artistic Henna</h3></div>
+                </div>
+            </div>
+            <div class="grid-item anniversory">
+                <div class="video-wrapper" onclick="openForm('ring')">
+                    <video autoplay muted loop playsinline><source src="image/video/videoplayback (2).mp4" type="video/mp4"></video>
+                    <div class="overlay-info"><span>ring</span><h3>Artistic Henna</h3></div>
+                </div>
+            </div>
+            </div>
+    </section>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeForm(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 id="formTitle">Gallery Collection</h2>
+                <div class="header-actions">
+                    <button class="btn-book-header" onclick="window.open('https://wa.me/919876543210', '_blank')">
+                        BOOK NOW <i class="fab fa-whatsapp"></i>
+                    </button>
+                    <div class="close-btn" onclick="toggleModal(false)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-content" id="formBody"></div>
+        </div>
+    </div>
+
+    <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox(event)">
+        <img src="" id="fullImage">
+    </div>
+
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer class="main-footer">
+        <div class="footer-grid">
+            <div class="footer-about">
+                <div class="logo" style="margin-bottom: 20px;">GRAND<span>VOWS</span></div>
+                <p>Creating royal experiences with premium tents and exquisite decorations. Your dream wedding is our mission.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>The Planner's Eye</h4>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Budget & Venue Audit</li>
+                    <li><i class="fas fa-check-circle"></i> Catering & Hygiene Check</li>
+                    <li><i class="fas fa-check-circle"></i> Theme & Decor Precision</li>
+                    <li><i class="fas fa-check-circle"></i> Sound & Light Backup</li>
+                    <li><i class="fas fa-check-circle"></i> Guest Capacity Audit</li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Our Services</a></li>
+                    <li><a href="">Packages</a></li>
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Book Now</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <div class="backup-card">
+                    <h4><i class="fas fa-shield-alt"></i> Our Backup Plan</h4>
+                    <p>Rain, power failure, or extra guests? Hum har situation ke liye ready hain with extra tents & generators.</p>
+                    <a href="tel:+919876543210" class="contact-large">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <span>Emergency Support 24/7</span>
+                            <strong>+91 98765 43210</strong>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 GrandVows Royal Events. All Rights Reserved.</p>
+            <p>Designed with <span style="color:red;">❤</span> for Royal Weddings</p>
+        </div>
+    </footer>
+
+    <script>
+        const galleryData = {
+            wedding: { title: "Royal Wedding Archive", items: ["image/field_gate1.png", "image/field_gate1.png"] },
+            haldi: { title: "Vibrant Haldi Memories", items: ["image/field_gate1.png"] },
+            
+            mehndi: { title: "Mehndi Designs", items: ["image/field_gate1.png"] },
+            birthday: { title: "Joyful Birthdays", items: ["image/field_gate1.png"] },
+            anniversory: { title: "Joyful anniversory", items: ["image/field_gate1.png"] },
+            car: { title: "Joyful car", items: ["image/field_gate1.png"] },
+            corprorate: { title: "Joyful corprorate", items: ["image/field_gate1.png"] },
+            ring: { title: "Joyful ring", items: ["image/field_gate1.png"] }
+        };
+
+        $(window).on('load', function() {
+            var $grid = $('.grid').isotope({
+                itemSelector: '.grid-item',
+                percentPosition: true,
+                masonry: { columnWidth: '.grid-item' }
+            });
+            $grid.imagesLoaded().progress(() => $grid.isotope('layout'));
+
+            $('.filter-btn').on('click', function() {
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+                $grid.isotope({ filter: $(this).attr('data-filter') });
+            });
+        });
+
+        function openForm(category) {
+            const data = galleryData[category];
+            if(!data) return;
+            document.getElementById('formTitle').innerText = data.title;
+            const body = document.getElementById('formBody');
+            body.innerHTML = '';
+            data.items.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.onclick = () => openLightbox(src);
+                body.appendChild(img);
+            });
+            toggleModal(true);
+        }
+
+        function toggleModal(show) {
+            document.getElementById('modalOverlay').classList.toggle('active', show);
+            document.body.style.overflow = show ? 'hidden' : 'auto';
+        }
+
+        function openLightbox(src) {
+            document.getElementById('fullImage').src = src;
+            document.getElementById('lightboxOverlay').style.display = 'flex';
+        }
+
+        function closeLightbox(e) {
+            document.getElementById('lightboxOverlay').style.display = 'none';
+        }
+
+        function closeForm(e) { 
+            if(e.target.id === 'modalOverlay') toggleModal(false); 
+        }
+
+        window.onkeydown = (e) => { 
+            if(e.keyCode == 27) { toggleModal(false); closeLightbox(); } 
+        };
+    </script>
+    <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('category');
+
+  if (category) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.filter === "." + category) {
+              btn.classList.add('active');
+          }
+      });
+
+      document.querySelectorAll('.gallery-item').forEach(item => {
+          if (!item.classList.contains(category)) {
+              item.style.display = "none";
+          }
+      });
+  }
+</script>
+</body>
+</html>

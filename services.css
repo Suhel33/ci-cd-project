@@ -1,0 +1,246 @@
+:root {
+    --gold: #D4AF37;
+    --royal-black: #1a1a1a;
+}
+
+ 
+
+ 
+
+.gold-text { color: var(--gold); }
+
+/* Navbar */
+/* .navbar { background: rgba(0, 0, 0, 0.9) !important; padding: 15px 0; } */
+
+/* Hero */
+/* .hero-section {
+    background:  
+                url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=2070');
+    background-attachment: fixed;
+    background-size: cover;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-align: center;
+} */
+
+/* Service Cards */
+.service-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: 0.4s;
+}
+
+.service-img-container { height: 250px; overflow: hidden; }
+.service-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+
+.service-card:hover { transform: translateY(-10px); }
+.service-card:hover img { transform: scale(1.1); }
+
+.category-badge {
+    position: absolute;
+    top: 15px; right: 15px;
+    background: var(--gold);
+    padding: 5px 15px;
+    border-radius: 20px;
+    z-index: 2;
+    font-size: 0.8rem;
+}
+
+.divider { width: 80px; height: 3px; background: var(--gold); margin: 20px auto; }
+
+
+
+
+
+/* more button */
+
+/* More Button Styling */
+.more-btn-overlay {
+    position: absolute;
+     bottom:-1px; /*Shuruat mein niche chhupa rahega */
+    right: 0;
+    background:rgb(245, 213, 86);
+    color: white;
+    padding: 8px 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-top-left-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+
+/* Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: #25d366;
+    color: white;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    font-size: 30px;
+    z-index: 100;
+}
+
+footer { background: var(--royal-black); }
+
+
+/* services plan */
+/* Planning Strategy Section */
+
+.planning-strategy {
+    background: linear-gradient(rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.9)), 
+                url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=2070');
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 100px 0;
+}
+
+.strategy-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 40px 30px;
+    border-radius: 20px;
+    color: white;
+    height: 100%;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(5px);
+}
+
+.strategy-card.active {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    transform: scale(1.05);
+}
+
+.strategy-card:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--gold);
+}
+
+.strategy-header i {
+    font-size: 3rem;
+    color: var(--gold);
+    display: block;
+}
+
+.strategy-header h4 {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+.strategy-list {
+    list-style: none;
+    padding: 0;
+}
+
+.strategy-list li {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    position: relative;
+    padding-left: 25px;
+}
+
+.strategy-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.strategy-list li strong {
+    color: var(--gold);
+}
+
+/* gallery */
+
+
+
+/* Inventory Section Background */
+.inventory-section {
+    background-color: #0b1120; /* Dark background matching screenshot */
+    padding: 80px 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Section Title Styling */
+.section-title {
+    color: #ffffff;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+    letter-spacing: 0.5px;
+}
+
+/* Grid Layout: Responsive */
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 Columns for Desktop */
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Card Styling */
+.inventory-card {
+    background-color: #1a2235; /* Dark card color */
+    border: 1px solid #2d3748; /* Subtle border */
+    border-radius: 12px;
+    padding: 25px;
+    min-height: 160px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.inventory-card:hover {
+    transform: translateY(-5px);
+    border-color: #4a5568;
+}
+
+/* Heading colors based on screenshot */
+.card-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.text-red { color: #f87171; }    /* Light Red/Coral color */
+.text-orange { color: #fb923c; } /* Orange color for Cooling */
+
+/* Description Text */
+.card-text {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* --- Responsive View --- */
+
+/* Tablets (iPad) */
+@media (max-width: 992px) {
+    .inventory-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 Columns */
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 576px) {
+    .inventory-grid {
+        grid-template-columns: 1fr; /* 1 Column */
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
+}

@@ -1,2 +1,2 @@
 # ci-cd-project
-Set Up a CI/CD Pipeling Using GitHub Actions
+Set Up a CI/CD PIpeline Using GitHub Actions with SSH
