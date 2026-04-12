@@ -9,9 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{steps.deployment.outputs.page_url}}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -24,18 +21,22 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            # Web folder mein jana
             cd /var/www/html
-            # Default file ko hatana agar wo wahan hai
-            sudo rm -f index.nginx-debian.html
             
-            # Code pull karna
+            # 1. Purani portfolio files ko backup ya delete karna (Safety ke liye)
+            # Hum saari purani files delete kar rahe hain taaki sirf Royal Events dikhe
+            sudo rm -rf *
+            
+            # 2. Git setup aur code pull karna
             sudo git config --global --add safe.directory /var/www/html
-            if [ -d ".git" ]; then
-              sudo git pull origin main
-            else
-              sudo git clone https://github.com/suhel33/localrepo.git .
-            fi
             
-            # Permissions sahi karna
+            # Agar .git folder nahi hai (jo ki hoga kyunki humne rm -rf kiya)
+            # Toh fresh clone karenge
+            sudo git clone https://github.com/suhel33/localrepo.git .
+            
+            # 3. Permissions fix karna
             sudo chown -R ubuntu:ubuntu /var/www/html
+            
+            # 4. Nginx restart karna
             sudo systemctl restart nginx
