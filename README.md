@@ -25,7 +25,7 @@ The pipeline automatically deploys a static website to an AWS EC2 server running
 
 
 ### ✅ CI/CD Pipeline (GitHub Actions)
-![GitHub Actions Success](<img width="1912" height="949" alt="Screenshot 2026-04-12 142212" src="https://github.com/user-attachments/assets/5b42eddf-3e31-47fa-b876-8f8cb4afff26" />)
+![GitHub Actions Success]<img width="1912" height="949" alt="Screenshot 2026-04-12 142212" src="https://github.com/user-attachments/assets/5b42eddf-3e31-47fa-b876-8f8cb4afff26" />
 
 
 ## 🔗 Live Link
