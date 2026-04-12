@@ -1,19 +1,18 @@
-name: Project 4 - AWS SSH Deployment
+name: Project 4 Deployment
 
 on:
   push:
     branches:
-      - main  # Jab aap main branch pe push karenge tab ye chalega
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Deploy to AWS EC2 via SSH
+      - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -21,21 +20,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Web directory mein jana (Ensure this path exists on your server)
+            sudo apt update -y
+            # Directory permission set karna
+            sudo mkdir -p /var/www/html
+            sudo chown -R ubuntu:ubuntu /var/www/html
             cd /var/www/html
-            
-            # Git pull karke naya code lena
-            # Agar folder empty hai toh clone karega, varna pull
+            # Code pull ya clone karna
             sudo git config --global --add safe.directory /var/www/html
             if [ -d ".git" ]; then
-              sudo git pull origin main
+              git pull origin main
             else
-              sudo git clone https://github.com/suhel33/localrepo.git .
+              git clone https://github.com/suhel33/localrepo.git .
             fi
-            
-            # Nginx ko restart karna taaki changes reflect hon
             sudo systemctl restart nginx
-
-      - name: Notify Status
-        if: always()
-        run: echo "Deployment process finished with status ${{ job.status }}"
