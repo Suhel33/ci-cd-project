@@ -1,4 +1,4 @@
-# ci-cd-project
+<img width="1913" height="948" alt="Screenshot 2026-04-12 141849" src="https://github.com/user-attachments/assets/821eb33e-1388-41d7-ace8-75ab899f85d8" /># ci-cd-project
 Set Up a CI/CD PIpeline Using GitHub Actions with SSH
 # 🚀 Royal Events - Automated CI/CD Deployment on AWS
 
@@ -21,10 +21,12 @@ The pipeline automatically deploys a static website to an AWS EC2 server running
 
 ## 📸 Screenshots
 ### 🌐 Live Website
-![Live Website](<img width="1913" height="948" alt="Screenshot 2026-04-12 141849" src="https://github.com/user-attachments/assets/79b141dc-6695-4c6b-b160-4f1e73e29f60" />)
+![Live Website](<img width="1913" height="948" alt="Screenshot 2026-04-12 141849" src="https://github.com/user-attachments/assets/ae13a887-bf87-47c4-b144-d25b384afd62" />)
+
 
 ### ✅ CI/CD Pipeline (GitHub Actions)
-![GitHub Actions Success](<img width="1912" height="949" alt="Screenshot 2026-04-12 142212" src="https://github.com/user-attachments/assets/db1a842d-d0e9-4f98-ba60-909683c31a52" />)
+![GitHub Actions Success](<img width="1912" height="949" alt="Screenshot 2026-04-12 142212" src="https://github.com/user-attachments/assets/5b42eddf-3e31-47fa-b876-8f8cb4afff26" />)
+
 
 ## 🔗 Live Link
 [View Project Live](http://54.208.208.14)
