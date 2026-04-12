@@ -19,21 +19,20 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # 1. Server ka /tmp folder use karke fresh code lana
             cd /tmp
             sudo rm -rf temp-repo
             git clone https://github.com/Suhel33/ci-cd-project.git temp-repo
-
-            # 2. Nginx ka folder puri tarah saaf karna (Hidden files bhi)
             sudo rm -rf /var/www/html/*
             sudo rm -rf /var/www/html/.* 2>/dev/null || true
-
-            # 3. Temp folder se saari files Nginx wale folder mein daalna
-            # (Agar aapka code kisi sub-folder mein hai, toh temp-repo/* ki jagah wo path aayega)
             sudo cp -r /tmp/temp-repo/* /var/www/html/
-
-            # 4. Permissions aur Restart (403 Error na aaye isliye)
             sudo chown -R www-data:www-data /var/www/html
             sudo find /var/www/html -type d -exec chmod 755 {} +
             sudo find /var/www/html -type f -exec chmod 644 {} +
             sudo systemctl restart nginx
+
+      # Ye naya step aapka URL generate karega
+      - name: 🌐 Generate Live URL
+        run: |
+          echo "### 🎉 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "Aapki website live ho chuki hai. Niche diye gaye link par click karein:" >> $GITHUB_STEP_SUMMARY
+          echo "👉 **[http://${{ secrets.REMOTE_HOST }}](http://${{ secrets.REMOTE_HOST }})**" >> $GITHUB_STEP_SUMMARY
