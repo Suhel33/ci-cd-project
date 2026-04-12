@@ -1,4 +1,4 @@
-<img width="1913" height="948" alt="Screenshot 2026-04-12 141849" src="https://github.com/user-attachments/assets/a51d6da5-a9ad-4ba6-b034-db2ce14a91a1" /># ci-cd-project
+# ci-cd-project
 Set Up a CI/CD PIpeline Using GitHub Actions with SSH
 # 🚀 Royal Events - Automated CI/CD Deployment on AWS
 
