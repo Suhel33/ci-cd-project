@@ -1,4 +1,4 @@
-name: Project 4 Final Deploy
+name: Project 4 Bulletproof Deploy
 
 on:
   push:
@@ -18,21 +18,22 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
           script: |
-            # 1. Web directory mein jana
-            cd /var/www/html
-            
-            # 2. Permissions sahi karna taaki files delete/write ho sakein
-            sudo chown -R ubuntu:ubuntu /var/www/html
-            
-            # 3. Purani saari files (Portfolio/Default Nginx) saaf karna
-            sudo rm -rf *
-            sudo rm -rf .git
-            
-            # 4. Fresh code clone karna seedha html folder mein
-            # Note: Last mein ' .' lagana zaroori hai (Space then Dot)
-            git clone https://github.com/Suhel33/ci-cd-project.git .
-            
-            # 5. Nginx restart karna
+            # 1. Server ka /tmp folder use karke fresh code lana
+            cd /tmp
+            sudo rm -rf temp-repo
+            git clone https://github.com/Suhel33/ci-cd-project.git temp-repo
+
+            # 2. Nginx ka folder puri tarah saaf karna (Hidden files bhi)
+            sudo rm -rf /var/www/html/*
+            sudo rm -rf /var/www/html/.* 2>/dev/null || true
+
+            # 3. Temp folder se saari files Nginx wale folder mein daalna
+            # (Agar aapka code kisi sub-folder mein hai, toh temp-repo/* ki jagah wo path aayega)
+            sudo cp -r /tmp/temp-repo/* /var/www/html/
+
+            # 4. Permissions aur Restart (403 Error na aaye isliye)
+            sudo chown -R www-data:www-data /var/www/html
+            sudo find /var/www/html -type d -exec chmod 755 {} +
+            sudo find /var/www/html -type f -exec chmod 644 {} +
             sudo systemctl restart nginx
