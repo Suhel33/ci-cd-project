@@ -1,4 +1,4 @@
-name: Project 4 Bulletproof Deploy
+name: CI-CD Pipeline Project
 
 on:
   push:
@@ -8,6 +8,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
+    # Environment settings
+    environment:
+      name: Production
+      url: http://54.208.208.14
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -19,20 +25,17 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /tmp
-            sudo rm -rf temp-repo
-            git clone https://github.com/Suhel33/ci-cd-project.git temp-repo
-            sudo rm -rf /var/www/html/*
-            sudo rm -rf /var/www/html/.* 2>/dev/null || true
-            sudo cp -r /tmp/temp-repo/* /var/www/html/
+            # Web directory setup
+            sudo mkdir -p /var/www/html
+            sudo chown -R ubuntu:ubuntu /var/www/html
+            cd /var/www/html
+            
+            # Cleaning and Cloning
+            sudo rm -rf *
+            sudo git clone https://github.com/Suhel33/ci-cd-project.git .
+            
+            # Permissions Fix
             sudo chown -R www-data:www-data /var/www/html
             sudo find /var/www/html -type d -exec chmod 755 {} +
             sudo find /var/www/html -type f -exec chmod 644 {} +
             sudo systemctl restart nginx
-
-      # Ye naya step aapka URL generate karega
-      - name: 🌐 Generate Live URL
-        run: |
-          echo "### 🎉 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
-          echo "Aapki website live ho chuki hai. Niche diye gaye link par click karein:" >> $GITHUB_STEP_SUMMARY
-          echo "👉 **[http://${{ secrets.REMOTE_HOST }}](http://${{ secrets.REMOTE_HOST }})**" >> $GITHUB_STEP_SUMMARY
