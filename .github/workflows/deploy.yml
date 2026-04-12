@@ -20,16 +20,18 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo apt update -y
-            # Directory permission set karna
-            sudo mkdir -p /var/www/html
-            sudo chown -R ubuntu:ubuntu /var/www/html
             cd /var/www/html
-            # Code pull ya clone karna
+            # Default file ko hatana agar wo wahan hai
+            sudo rm -f index.nginx-debian.html
+            
+            # Code pull karna
             sudo git config --global --add safe.directory /var/www/html
             if [ -d ".git" ]; then
-              git pull origin main
+              sudo git pull origin main
             else
-              git clone https://github.com/suhel33/localrepo.git .
+              sudo git clone https://github.com/suhel33/localrepo.git .
             fi
+            
+            # Permissions sahi karna
+            sudo chown -R ubuntu:ubuntu /var/www/html
             sudo systemctl restart nginx
