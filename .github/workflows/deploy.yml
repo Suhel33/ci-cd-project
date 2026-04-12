@@ -1,4 +1,4 @@
-name: CI-CD Pipeline Project
+name: Project 4 Bulletproof Deploy
 
 on:
   push:
@@ -8,12 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    # Environment settings
-    environment:
-      name: Production
-      url: http://54.208.208.14
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,16 +19,20 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Web directory setup
-            sudo mkdir -p /var/www/html
-            sudo chown -R ubuntu:ubuntu /var/www/html
-            cd /var/www/html
-            
-            # Cleaning and Cloning
-            sudo rm -rf *
-            sudo git clone https://github.com/Suhel33/ci-cd-project.git .
-            
-            # Permissions Fix
+            # 1. Server ka /tmp folder use karke fresh code lana
+            cd /tmp
+            sudo rm -rf temp-repo
+            git clone https://github.com/Suhel33/ci-cd-project.git temp-repo
+
+            # 2. Nginx ka folder puri tarah saaf karna (Hidden files bhi)
+            sudo rm -rf /var/www/html/*
+            sudo rm -rf /var/www/html/.* 2>/dev/null || true
+
+            # 3. Temp folder se saari files Nginx wale folder mein daalna
+            # (Agar aapka code kisi sub-folder mein hai, toh temp-repo/* ki jagah wo path aayega)
+            sudo cp -r /tmp/temp-repo/* /var/www/html/
+
+            # 4. Permissions aur Restart (403 Error na aaye isliye)
             sudo chown -R www-data:www-data /var/www/html
             sudo find /var/www/html -type d -exec chmod 755 {} +
             sudo find /var/www/html -type f -exec chmod 644 {} +
