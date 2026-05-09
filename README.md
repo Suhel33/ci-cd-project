@@ -29,7 +29,7 @@ The pipeline automatically deploys a static website to an AWS EC2 server running
 
 
 ## 🔗 Live Link
-[View Project Live](http://54.208.208.14)
+[View Project Live](http://18.209.222.175/)
 
 ## 🧠Key Learnings
 - Implemented end-to-end CI/CD automation
